@@ -1,0 +1,28 @@
+div.unique-span {
+  max-width: 100%;
+  background-color: rgba(255, 204, 128, 0.25);
+  padding-left: 110px;
+  padding-right: 110px;
+  font-weight: 600;
+  font-size: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-top: 15px;
+  margin-bottom: 25px;
+}
+h6{
+  font-size: 1.3rem !important;
+}
+@media (max-width: 1199px) {
+  div.unique-span {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+}
+@media (max-width: 767px) {
+  div.unique-span {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+

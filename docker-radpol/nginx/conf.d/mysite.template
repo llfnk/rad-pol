@@ -1,0 +1,26 @@
+map ${DOLLAR}sent_http_content_type ${DOLLAR}expires {
+    "text/html"                 1h;
+    "text/html; charset=utf-8"  1h;
+    default                     1d;
+}
+
+server {
+    listen ${NGINX_PORT};
+    server_name ${HOSTNAME_NGINX_EXTERNAL};
+
+    gzip            on;
+    gzip_types      text/plain application/xml text/css application/javascript;
+    gzip_min_length 1000;
+
+    location / {
+        expires ${DOLLAR}expires;
+        proxy_redirect                      off;
+        proxy_set_header Host ${DOLLAR}host;
+        proxy_set_header X-Real-IP          ${DOLLAR}remote_addr;
+        proxy_set_header X-Forwarded-For ${DOLLAR}proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto  ${DOLLAR}scheme;
+        proxy_read_timeout          1m;
+        proxy_connect_timeout       1m;
+        proxy_pass http://${HOSTNAME_FRONT_LOCAL}:${FRONT_PORT};
+    }
+}

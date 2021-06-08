@@ -1,0 +1,99 @@
+version: '3.5'
+services:
+    strapi:
+        image: 127.0.0.1:5000/lsbpl-strapi
+        build:
+            context: ./strapi
+        environment:
+            DATABASE_CLIENT: ${STRAPI_DATABASE_CLIENT}
+            DATABASE_NAME: ${STRAPI_DATABASE_NAME}
+            DATABASE_HOST: ${HOSTNAME_POSTGRES_LOCAL}
+            DATABASE_PORT: ${POSTGRES_PORT}
+            DATABASE_USERNAME: ${POSTGRES_USER}
+            DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
+            PORT: ${STRAPI_PORT}
+            CURRENT_UID_GID: ${CURRENT_UID_GID}
+            CURRENT_UID: ${CURRENT_UID}
+            ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+        links:
+            - postgres:postgres
+        volumes:
+            - ./../strapi:/srv/app
+            - strapi_uploads:/srv/app/public/uploads
+            - ~/.ssh:/root/.ssh_copy:ro
+        networks:
+            - app_net_bridge
+            - proxy
+        hostname: ${HOSTNAME_STRAPI_LOCAL}
+        depends_on:
+            - postgres
+        deploy:
+            replicas: 1
+            labels:
+                - com.df.notify=true
+                - com.df.port=1337
+                - com.df.servicePath=/
+                - com.df.serviceDomain=${HOSTNAME_STRAPI_EXTERNAL}
+    postgres:
+        image: postgres:12.4
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        volumes:
+            - db_data:/var/lib/postgresql/data
+        hostname: ${HOSTNAME_POSTGRES_LOCAL}
+        networks:
+            - app_net_bridge
+        deploy:
+            replicas: 1
+    front:
+        image: 127.0.0.1:5000/lsbpl-front
+        build:
+            context: ./front
+        volumes:
+            - ./../app:/usr/src/app
+            - ~/.ssh:/root/.ssh_copy:ro
+        env_file:
+            - .env
+        environment:
+            - CURRENT_UID_GID=${CURRENT_UID_GID}
+            - CHOKIDAR_USEPOLLING=true
+        networks:
+            - app_net_bridge
+        hostname: ${HOSTNAME_FRONT_LOCAL}
+        deploy:
+            replicas: 1
+        user: ${CURRENT_UID_GID}
+    nginx:
+        image: nginx:1.19
+        volumes:
+            - ./nginx/conf.d/mysite.template:/etc/nginx/conf.d/mysite.template:ro
+            - ~/.ssh:/root/.ssh_copy:ro
+        depends_on:
+            - front
+        environment:
+            - CURRENT_UID_GID=${CURRENT_UID_GID}
+        env_file:
+            - .env
+        networks:
+            - app_net_bridge
+            - proxy
+        command: /bin/bash -c "envsubst < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+        hostname: ${HOSTNAME_NGINX_LOCAL}
+        deploy:
+            replicas: 1
+            labels:
+                - com.df.notify=true
+                - com.df.port=80
+                - com.df.servicePath=/
+                - com.df.serviceDomain=${HOSTNAME_NGINX_EXTERNAL},www.${HOSTNAME_NGINX_EXTERNAL}
+volumes:
+    db_data:
+        driver: local
+    strapi_uploads:
+        driver: local
+networks:
+    app_net_bridge:
+        external: false
+    proxy:
+        external: true
