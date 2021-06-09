@@ -3,7 +3,7 @@
 ./../updateSources.sh origin master
 ./check_dists.sh
 
-rm -f  ./../app_update.lock
+#rm -f  ./app_update.lock
 ./set_current_uid.sh
 echo "Build"
 docker-compose -f docker-compose-dev.yml build
@@ -26,5 +26,6 @@ POSTGRES_PORT="$(grep POSTGRES_PORT= .env | cut -d '=' -f2)" \
 POSTGRES_USER="$(grep POSTGRES_USER= .env | cut -d '=' -f2)" \
 POSTGRES_PASSWORD="$(grep POSTGRES_PASSWORD= .env | cut -d '=' -f2)" \
 STRAPI_PORT="$(grep STRAPI_PORT= .env | cut -d '=' -f2)" \
+FRONT_PORT="$(grep FRONT_PORT= .env | cut -d '=' -f2)" \
 ADMIN_JWT_SECRET="$(grep ADMIN_JWT_SECRET= .env | cut -d '=' -f2)" \
 docker stack deploy -c ./docker-compose-dev.yml $COMPOSE_PROJECT_NAME

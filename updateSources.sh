@@ -12,4 +12,4 @@ echo "Fetching $branch"
 git fetch "$remote"
 git merge "$remote/$branch"
 
-echo "Please restart docker-ofsy2 stack if running"
+echo "Please restart docker-radpol stack if running"
