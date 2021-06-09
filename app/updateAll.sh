@@ -8,6 +8,7 @@ if [[ $APP_MODE == "dev" ]]; then
   HOST=$FRONT_HOST PORT=$FRONT_PORT npm run dev
   echo -e "Run dev mode"
 else
-  npm run build && npm run start
+  npm run build
+  HOST=$FRONT_HOST PORT=$FRONT_PORT npm run start
   echo -e "Run production mode"
 fi
