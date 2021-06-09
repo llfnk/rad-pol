@@ -12,6 +12,21 @@ server {
     gzip_types      text/plain application/xml text/css application/javascript;
     gzip_min_length 1000;
 
+    server_tokens off;
+
+    error_page 502 503 504 /custom_50x.html;
+
+    location /custom_50x.html {
+        root /usr/share/nginx/html/maintenance;
+        rewrite ^/custom_50x.html?$ /index.html break;
+        internal;
+    }
+    location /error500/ {
+        root /usr/share/nginx/html;
+        rewrite ^/error500/(.*)$ /maintenance/$1 break;
+    }
+
+
     location / {
         expires ${DOLLAR}expires;
         proxy_redirect                      off;
