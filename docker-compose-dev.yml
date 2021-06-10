@@ -70,26 +70,24 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile
-      volumes:
-        - ./nginx/conf.d:/etc/nginx/templates:rw,cached
-        - ~/.ssh:/root/.ssh_copy:ro
-      depends_on:
-        - front
-      environment:
-        - CURRENT_UID_GID=${CURRENT_UID_GID}
-      env_file:
-        - .env
-      networks:
-        - app_net_bridge
-        - proxy
-      hostname: ${HOSTNAME_NGINX_LOCAL}
-      deploy:
-        replicas: 1
-        labels:
-          - com.df.notify=true
-          - com.df.port=80
-          - com.df.servicePath=/
-          - com.df.serviceDomain=${HOSTNAME_NGINX_EXTERNAL},www.${HOSTNAME_NGINX_EXTERNAL}
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/templates:rw,cached
+      - ~/.ssh:/root/.ssh_copy:ro
+    depends_on:
+      - front
+    env_file:
+      - .env
+    networks:
+      - app_net_bridge
+      - proxy
+    hostname: ${HOSTNAME_NGINX_LOCAL}
+    deploy:
+      replicas: 1
+      labels:
+        - com.df.notify=true
+        - com.df.port=80
+        - com.df.servicePath=/
+        - com.df.serviceDomain=${HOSTNAME_NGINX_EXTERNAL},www.${HOSTNAME_NGINX_EXTERNAL}
 volumes:
   db_data:
     driver: local
