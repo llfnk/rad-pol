@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   strapi:
-    image: 127.0.0.1:5000/radpol-strapi
+    image: "127.0.0.1:5000/radpol-strapi-$TC_BRANCH:$TC_BUILD_NUMBER"
     build:
       context: ./strapi
     environment:
@@ -47,7 +47,7 @@ services:
     deploy:
       replicas: 1
   front:
-    image: 127.0.0.1:5000/radpol-front
+    image: "127.0.0.1:5000/radpol-front-$TC_BRANCH:$TC_BUILD_NUMBER"
     build:
       context: ./app
     volumes:
@@ -67,6 +67,7 @@ services:
       replicas: 1
     user: ${CURRENT_UID_GID}
   nginx:
+    image: "127.0.0.1:5000/radpol-nginx-$TC_BRANCH:$TC_BUILD_NUMBER"
     build:
       context: ./nginx
       dockerfile: Dockerfile
