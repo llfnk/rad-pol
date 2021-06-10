@@ -6,14 +6,20 @@
 #rm -f  ./app_update.lock
 ./set_current_uid.sh
 echo "Build"
+TC_BRANCH=$1 \
+TC_BUILD_NUMBER=$2 \
 docker-compose -f docker-compose-dev.yml build
 
 echo "Push"
+TC_BRANCH=$1 \
+TC_BUILD_NUMBER=$2 \
 docker-compose -f docker-compose-dev.yml push
 
 echo "Deploying stack";
 COMPOSE_PROJECT_NAME="$(grep COMPOSE_PROJECT_NAME= .env | cut -d '=' -f2)"
 
+TC_BRANCH=$1 \
+TC_BUILD_NUMBER=$2 \
 CURRENT_UID_GID="$(id -u):$(id -g)" \
 CURRENT_UID="$(id -u)" \
 CURRENT_GID="$(id -g)" \
