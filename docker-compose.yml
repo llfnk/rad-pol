@@ -82,7 +82,7 @@ services:
     ports:
       - 6080:80
     volumes:
-      - ./nginx/conf.d/mysite.template:/etc/nginx/conf.d/mysite.template:ro
+      - ./nginx/conf.d:/etc/nginx/templates:rw,cached
       - ~/.ssh:/root/.ssh_copy:ro
       - /etc/hosts:/etc/hosts:ro
     depends_on:
@@ -95,7 +95,6 @@ services:
     networks:
       - app_net_bridge
       - app_main_bridge
-    command: /bin/bash -c "envsubst < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
     hostname: ${HOSTNAME_NGINX_LOCAL}
 volumes:
   db_data:

@@ -1,4 +1,4 @@
-map ${DOLLAR}sent_http_content_type ${DOLLAR}expires {
+map $sent_http_content_type $expires {
     "text/html"                 1h;
     "text/html; charset=utf-8"  1h;
     default                     1d;
@@ -28,12 +28,12 @@ server {
 
 
     location / {
-        expires ${DOLLAR}expires;
+        expires $expires;
         proxy_redirect                      off;
-        proxy_set_header Host ${DOLLAR}host;
-        proxy_set_header X-Real-IP          ${DOLLAR}remote_addr;
-        proxy_set_header X-Forwarded-For ${DOLLAR}proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto  ${DOLLAR}scheme;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP          $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto  $scheme;
         proxy_read_timeout          1m;
         proxy_connect_timeout       1m;
         proxy_pass http://${HOSTNAME_FRONT_LOCAL}:${FRONT_PORT};
