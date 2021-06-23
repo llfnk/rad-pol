@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   strapi:
-    image: 127.0.0.1:5000/radpol-strapi
+    image: "127.0.0.1:5000/radpol-strapi-$TC_BRANCH:$TC_BUILD_NUMBER"
     build:
       context: ./strapi
     environment:
@@ -47,7 +47,7 @@ services:
     deploy:
       replicas: 1
   front:
-    image: 127.0.0.1:5000/radpol-front
+    image: "127.0.0.1:5000/radpol-front-$TC_BRANCH:$TC_BUILD_NUMBER"
     build:
       context: ./app
     volumes:
@@ -67,30 +67,28 @@ services:
       replicas: 1
     user: ${CURRENT_UID_GID}
   nginx:
+    image: "127.0.0.1:5000/radpol-nginx-$TC_BRANCH:$TC_BUILD_NUMBER"
     build:
       context: ./nginx
       dockerfile: Dockerfile
-      volumes:
-        - ./nginx/conf.d/mysite.template:/etc/nginx/conf.d/mysite.template:ro
-        - ~/.ssh:/root/.ssh_copy:ro
-      depends_on:
-        - front
-      environment:
-        - CURRENT_UID_GID=${CURRENT_UID_GID}
-      env_file:
-        - .env
-      networks:
-        - app_net_bridge
-        - proxy
-      command: /bin/bash -c "envsubst < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
-      hostname: ${HOSTNAME_NGINX_LOCAL}
-      deploy:
-        replicas: 1
-        labels:
-          - com.df.notify=true
-          - com.df.port=80
-          - com.df.servicePath=/
-          - com.df.serviceDomain=${HOSTNAME_NGINX_EXTERNAL},www.${HOSTNAME_NGINX_EXTERNAL}
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/templates:rw,cached
+      - ~/.ssh:/root/.ssh_copy:ro
+    depends_on:
+      - front
+    env_file:
+      - .env
+    networks:
+      - app_net_bridge
+      - proxy
+    hostname: ${HOSTNAME_NGINX_LOCAL}
+    deploy:
+      replicas: 1
+      labels:
+        - com.df.notify=true
+        - com.df.port=80
+        - com.df.servicePath=/
+        - com.df.serviceDomain=${HOSTNAME_NGINX_EXTERNAL},www.${HOSTNAME_NGINX_EXTERNAL}
 volumes:
   db_data:
     driver: local
