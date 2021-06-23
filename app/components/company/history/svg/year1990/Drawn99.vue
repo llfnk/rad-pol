@@ -1,0 +1,77 @@
+<template>
+  <svg xmlns='http://www.w3.org/2000/svg' width='237.98' height='297.84' viewBox='0 0 237.98 297.84'>
+    <defs>
+      <style>.a {
+        fill: none;
+        stroke: #ff2d32;
+        opacity: 0.9;
+      }</style>
+    </defs>
+    <path id='pPath9999' stroke-width='1'
+          stroke='#ff2d32' class='drawn-path'
+          d='M116.85-291.92q60.27,0,94.3,36.7T245.18-149.65q0,48.79-18.245,83.64T175.48-13.12Q142.27,4.92,98.81,4.92A183.683,183.683,0,0,1,54.94-.205Q34.03-5.33,19.27-14.76l24.6-48.79Q64.78-49.2,97.58-49.2q36.49,0,57.81-21.525t22.96-62.115q-25.83,25.83-71.34,25.83-27.47,0-50.02-11.07a87.389,87.389,0,0,1-35.67-31.365Q8.2-169.74,8.2-196.39q0-28.7,14.35-50.43t39.155-33.415Q86.51-291.92,116.85-291.92Zm4.92,135.3q21.73,0,35.465-12.095T170.97-199.67q0-18.86-13.325-30.75T120.95-242.31q-21.32,0-34.645,11.48T72.98-199.67q0,19.68,13.325,31.365T121.77-156.62Z'
+          transform='translate(-7.7 292.42)' />
+  </svg>
+</template>
+
+<script>
+import ViewportMixin from '~/components/util/mixins/ViewportMixin'
+
+export default {
+  name: 'Drawn99',
+  mixins: [ViewportMixin],
+  created() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  mounted() {
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll)
+  },
+  methods: {
+    handleScroll() {
+      const self = this
+
+      const procentOfTopSection = 30
+      if (window.innerWidth < 767) {
+        const procentOfTopSection = 60
+      }
+      if (
+        this.isAnyPartOfElementInViewport(document.getElementById('year1990'))
+      ) {
+        if (
+          this.getProcentOfSectionToTop(
+            document.getElementById('year1990')
+          ) > procentOfTopSection
+        ) {
+          document.getElementById('pPath9999').classList.add('path')
+        }
+      }
+    }
+  }
+}
+</script>
+
+<style scoped lang='scss'>
+.drawn-path {
+  fill: $c0;
+  opacity: 0;
+}
+
+.path {
+  stroke-dasharray: 1435;
+  stroke-dashoffset: 0;
+  animation: dash 1.5s linear alternate 1;
+  opacity: 1;
+}
+
+@keyframes dash {
+  from {
+    stroke-dashoffset: 1435;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+</style>

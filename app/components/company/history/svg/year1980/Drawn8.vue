@@ -1,0 +1,73 @@
+<template>
+  <svg xmlns="http://www.w3.org/2000/svg" width="242.9" height="297.84" viewBox="0 0 242.9 297.84">
+    <defs>
+      <style>.a{fill:none;stroke:#ff2d32;}</style>
+    </defs>
+    <path id='pPath8' stroke-width='1'
+          stroke='#ff2d32' class='drawn-path'
+          d="M212.38-150.88q21.32,10.66,32.6,27.88T256.25-83.23q0,26.65-15.17,46.535T198.44-5.945Q170.97,4.92,134.89,4.92T71.545-5.945Q44.28-16.81,29.315-36.695T14.35-83.23q0-22.55,11.275-39.77T57.81-150.88a70.033,70.033,0,0,1-24.6-24.805Q24.6-190.65,24.6-209.92q0-25.01,13.94-43.46t38.95-28.5q25.01-10.045,57.4-10.045,32.8,0,58.015,10.045t39.155,28.5Q246-234.93,246-209.92q0,19.27-8.61,34.235T212.38-150.88Zm-77.49-92.25q-20.09,0-32.185,9.635T90.61-207.05q0,16.4,11.89,25.83t32.39,9.43q20.5,0,32.8-9.43t12.3-25.83q0-16.81-12.3-26.445T134.89-243.13Zm0,199.26q25.01,0,39.565-11.275T189.01-85.28q0-18.86-14.555-29.93T134.89-126.28q-24.6,0-38.95,11.07T81.59-85.28q0,19.27,14.35,30.34T134.89-43.87Z"
+          transform="translate(-13.85 292.42)"/>
+  </svg>
+</template>
+
+<script>
+import ViewportMixin from '~/components/util/mixins/ViewportMixin'
+
+export default {
+  name: 'Drawn8',
+  mixins: [ViewportMixin],
+  created() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  mounted() {
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll)
+  },
+  methods: {
+    handleScroll() {
+      const self = this
+
+      const procentOfTopSection = 30
+      if (window.innerWidth < 767) {
+        const procentOfTopSection = 60
+      }
+      if (
+        this.isAnyPartOfElementInViewport(document.getElementById('year1980'))
+      ) {
+        if (
+          this.getProcentOfSectionToTop(
+            document.getElementById('year1980')
+          ) > procentOfTopSection
+        ) {
+          document.getElementById('pPath8').classList.add('path')
+        }
+      }
+    }
+  }
+}
+</script>
+
+<style scoped lang='scss'>
+.drawn-path {
+  fill: #fff;
+  opacity: 0;
+}
+
+.path {
+  stroke-dasharray: 1435;
+  stroke-dashoffset: 0;
+  animation: dash 1.5s linear alternate 1;
+  opacity: 1;
+}
+
+@keyframes dash {
+  from {
+    stroke-dashoffset: 1435;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+</style>

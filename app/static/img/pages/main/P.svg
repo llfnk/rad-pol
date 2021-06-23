@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="365.2" height="421" viewBox="0 0 365.2 421">
+  <defs>
+    <style>.a{fill:none;stroke:#ff2d32;}</style>
+  </defs>
+  <path class="a"
+        d="M231.6-420q55.8,0,96.9,18.6t63.3,52.8q22.2,34.2,22.2,81,0,46.2-22.2,80.7t-63.3,52.8q-41.1,18.3-96.9,18.3H147V0H49.8V-420Zm-5.4,225q43.8,0,66.6-18.9t22.8-53.7q0-35.4-22.8-54.3t-66.6-18.9H147V-195Z"
+        transform="translate(-49.3 420.5)"/>
+</svg>

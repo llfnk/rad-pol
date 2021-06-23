@@ -1,0 +1,53 @@
+.btn {
+  height: 60px;
+  width: 230px;
+  color: $black;
+  border: 2px solid $primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.32px;
+  line-height: 1.2rem;
+  position: relative;
+  transition: transform 0.3s ease-out;
+  cursor: pointer;
+
+  span {
+    z-index: 1;
+  }
+
+  &.border-white {
+    border-color: $white;
+    color: $white;
+    transition: transform 0.3s ease-out;
+
+    &:before {
+      position: absolute;
+      width:100%;
+      transform:scaleX(0);
+      top: 0px;
+      left: 0px;
+      transform-origin: 0 50%;
+      height: 100%;
+      background-color: $white;
+      content: '';
+      z-index: 0;
+      transition: transform 0.3s ease-out;
+    }
+
+    &:hover {
+      color: $black;
+      transition: transform 0.3s ease-out;
+
+      &:before {
+        width: 100%;
+        transform:scaleX(1);
+        transition: transform 0.3s ease-out;
+      }
+    }
+  }
+
+}
